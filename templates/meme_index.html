@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>A website to procrastinate!</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            background: linear-gradient(135deg, #1c1c1c, #292929); /* Gradient background */
+            font-family: 'Roboto', sans-serif; /* Use Google Fonts */
+            margin: 0; /* Remove default margin */
+            color: #f2f2f2; /* Text color */
+            font-size: 130%; /* Increase base font size to 130% */
+        }
+        header {
+            display: flex;
+            justify-content: space-between; /* Aligns items to the left and right */
+            align-items: center; /* Vertically centers items */
+            padding: 20px; /* Increased padding */
+        }
+        h1 {
+            font-size: 36px; /* Increase font size */
+            margin: 0; /* Remove default margin */
+        }
+        .clock {
+            font-size: 24px; /* Smaller clock font size */
+            color: #ffffff; /* Clock color */
+        }
+        .meme-card {
+            background-color: rgba(30, 30, 30, 0.8); /* Dark card background */
+            border-radius: 10px; /* Rounded corners */
+            padding: 20px; /* Padding inside card */
+            margin: 20px auto; /* Center card with auto margins */
+            width: fit-content; /* Allow width to fit content */
+            max-width: 90%; /* Prevent it from stretching too wide */
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3); /* Card shadow */
+            text-align: center; /* Center text inside card */
+        }
+        .meme-title {
+            font-size: 28px; /* Slightly larger title size */
+            margin: 10px 0; /* Add margin for spacing */
+            white-space: nowrap; /* Prevent line breaks */
+            overflow: hidden; /* Hide overflow */
+            text-overflow: ellipsis; /* Add ellipsis for long titles */
+        }
+        img {
+            border-radius: 15px; /* Rounded corners for images */
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3); /* Subtle shadow for images */
+            width: 390px; /* Fixed width to maintain proportion */
+            height: auto; /* Maintain aspect ratio */
+        }
+        .subreddit {
+            font-size: 18px; /* Adjust size for subreddit */
+            margin-top: 10px; /* Margin for spacing */
+        }
+        button {
+            background-color: #007BFF; /* Button color */
+            color: white; /* Button text color */
+            border: none; /* Remove default border */
+            border-radius: 5px; /* Rounded button corners */
+            padding: 10px 15px; /* Padding inside button */
+            cursor: pointer; /* Pointer on hover */
+            transition: background-color 0.3s ease; /* Transition for hover */
+            margin-top: 15px; /* Margin for spacing */
+            font-size: 20px; /* Increase button text size */
+        }
+        button:hover {
+            background-color: #0056b3; /* Darker color on hover */
+        }
+
+        /* Modal (pop-out) styles */
+        .modal {
+            display: none; /* Hidden by default */
+            position: fixed; /* Stay in place */
+            z-index: 1; /* Sit on top */
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.8); /* Black background with opacity */
+            display: flex;
+            justify-content: center;
+            align-items: center; /* Center vertically */
+        }
+
+        .modal-content {
+            margin: auto;
+            display: block;
+            max-width: 80%;
+            max-height: 80%; /* Limit the height to prevent overflow */
+        }
+
+        /* Animation for modal */
+        .modal-content {
+            animation-name: zoom;
+            animation-duration: 0.6s;
+        }
+
+        @keyframes zoom {
+            from {transform: scale(0)} 
+            to {transform: scale(1)}
+        }
+    </style>
+</head>
+<body>
+
+<header>
+    <h1>Daniel´s Meme Factory</h1>
+    <div class="clock" id="clock"></div> <!-- Clock in header -->
+</header>
+
+<div class="meme-card">
+    <p class="meme-title">{{ title }}</p> <!-- Added title here -->
+    <p><img id="myImage" src="{{ meme_pic }}" alt="Meme"></p>
+    <p class="subreddit">Subreddit: {{ subreddit }}</p>
+    <button onclick="location.reload();">Next Meme</button> <!-- Next Meme button -->
+</div>
+
+<!-- The Modal -->
+<div id="myModal" class="modal">
+    <img class="modal-content" id="imgModal">
+</div>
+
+<script>
+// Get the modal
+var modal = document.getElementById("myModal");
+
+// Get the image and insert it inside the modal
+var img = document.getElementById("myImage");
+var modalImg = document.getElementById("imgModal");
+
+img.onclick = function(){
+    modal.style.display = "flex"; // Show the modal when image is clicked
+    modalImg.src = this.src;
+}
+
+// Close the modal if the user clicks outside the image
+modal.onclick = function(event) {
+    if (event.target === modal) {
+        modal.style.display = "none"; // Hide the modal
+    }
+}
+
+// Ensure modal doesn't open on refresh
+window.onload = function() {
+    modal.style.display = "none"; // Ensure the modal stays hidden
+    startClock(); // Start the clock when the page loads
+}
+
+// Function to start the clock
+function startClock() {
+    const clockElement = document.getElementById('clock');
+    function updateClock() {
+        const now = new Date();
+        const options = { hour: '2-digit', minute: '2-digit', hour12: false }; // Exclude seconds
+        clockElement.textContent = now.toLocaleTimeString('en-US', options);
+    }
+    updateClock(); // Initial call to set the time immediately
+    setInterval(updateClock, 60000); // Update the clock every minute
+}
+</script>
+
+</body>
+</html>
